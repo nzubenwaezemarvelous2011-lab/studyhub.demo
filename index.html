@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d18">
+  <meta name="description" content="SPSS StudyHub login interface demo.">
+  <title>SPSS StudyHub | Login</title>
+
+  <style>
+    :root {
+      --bg: #080d18;
+      --panel: #101a2b;
+      --input: #0b1322;
+      --text: #f4f7ff;
+      --muted: #93a2ba;
+      --accent: #6c83ff;
+      --border: rgba(255,255,255,.09);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(ellipse at 15% 10%, rgba(65,87,180,.18), transparent 42%),
+        radial-gradient(ellipse at 90% 90%, rgba(34,120,160,.12), transparent 40%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      width: 100%;
+      padding: 26px 7%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #788aff, #3948a9);
+      font-size: 21px;
+      font-weight: 900;
+      box-shadow: 0 5px 24px #4d65ff30;
+    }
+
+    .brand-name { font-size: 16px; font-weight: 800; letter-spacing: 1.2px; }
+    .brand-sub { margin-top: 4px; font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+
+    main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 45px 18px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+      padding: 35px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: rgba(16,26,43,.88);
+      box-shadow: 0 25px 90px #00000035;
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+      animation: appear .5s ease;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      color: #a9b6ff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 { font-size: clamp(27px, 6vw, 34px); letter-spacing: -1px; margin-bottom: 10px; }
+
+    .description { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 28px; }
+
+    .field { margin-bottom: 19px; }
+
+    label { display: block; margin-bottom: 9px; font-size: 12px; font-weight: 700; color: #dce4f5; }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--input);
+      color: white;
+      outline: none;
+      font-size: 16px;
+      transition: border .2s, box-shadow .2s;
+    }
+
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #6c83ff30; }
+    input::placeholder { color: #66758c; }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      color: #aebaff;
+      text-decoration: none;
+      font-size: 12px;
+      margin: -3px 0 22px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      background: linear-gradient(110deg, #7185ff, #5265df);
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s, filter .2s;
+    }
+
+    .primary-btn:hover { filter: brightness(1.12); transform: translateY(-1px); }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #65748c;
+      font-size: 11px;
+      margin: 25px 0;
+    }
+
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+    .bottom-text { text-align: center; font-size: 13px; color: var(--muted); line-height: 1.8; }
+    .bottom-text a { color: #aebaff; text-decoration: none; font-weight: 700; }
+
+    .notice {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #202c43;
+      color: #dbe5ff;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 22px;
+      text-align: center;
+      color: #65748c;
+      font-size: 11px;
+      border-top: 1px solid var(--border);
+    }
+
+    #adminScreen { display: none; }
+
+    #secretArea {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 85px;
+      height: 85px;
+      z-index: 100;
+      background: transparent;
+      opacity: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: none;
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 20px; }
+      .login-card { padding: 27px 22px; border-radius: 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="secretArea" aria-hidden="true"></div>
+
+  <header>
+    <div class="brand-icon" aria-hidden="true">S</div>
+    <div>
+      <div class="brand-name">SPSS STUDYHUB</div>
+      <div class="brand-sub">LEARN &middot; GROW &middot; EXCEL</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="login-card" id="userScreen">
+      <div class="eyebrow">Your learning space</div>
+      <h1>Welcome back.</h1>
+      <p class="description">Login to continue to your StudyHub account.</p>
+
+      <form id="userForm">
+        <div class="field">
+          <label for="userEmail">Email address</label>
+          <input id="userEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="userPassword">Password</label>
+          <input id="userPassword" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+
+        <a href="#" class="forgot" id="forgotLink">Forgot password?</a>
+
+        <button class="primary-btn" type="submit">Login</button>
+      </form>
+
+      <div class="notice" id="userNotice" role="status"></div>
+
+      <div class="divider">SPSS STUDYHUB</div>
+
+      <p class="bottom-text">
+        New to StudyHub?<br>
+        <a href="#" id="signupLink">Create an account</a>
+      </p>
+    </section>
+
+    <section class="login-card" id="adminScreen">
+      <div class="eyebrow">Restricted access</div>
+      <h1>Admin portal.</h1>
+      <p class="description">Login with your authorized administrator account.</p>
+
+      <form id="adminForm">
+        <div class="field">
+          <label for="adminEmail">Admin email</label>
+          <input id="adminEmail" type="email" placeholder="Admin email address" autocomplete="username" required>
+        </div>
+
+        <div class="field">
+          <label for="adminPassword">Password</label>
+          <input id="adminPassword" type="password" placeholder="Enter admin password" autocomplete="current-password" required>
+        </div>
+
+        <button class="primary-btn" type="submit">Login</button>
+      </form>
+
+      <div class="notice" id="adminNotice" role="status"></div>
+
+      <div class="divider">SECURE ADMIN ACCESS</div>
+
+      <p class="bottom-text"><a href="#" id="backLink">Return to login</a></p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> SPSS StudyHub &middot; St. Patrick Secondary School
+  </footer>
+
+  <script>
+    var secretArea  = document.getElementById("secretArea");
+    var userScreen  = document.getElementById("userScreen");
+    var adminScreen = document.getElementById("adminScreen");
+    var userNotice  = document.getElementById("userNotice");
+    var adminNotice = document.getElementById("adminNotice");
+
+    var HOLD_DURATION = 15000; // 15 seconds
+    var pressTimer = null;
+
+    function startPress(event) {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (adminScreen.style.display === "block") return;
+
+      clearTimeout(pressTimer);
+      pressTimer = setTimeout(openAdminLogin, HOLD_DURATION);
+    }
+
+    function cancelPress() {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    }
+
+    function hideNotices() {
+      userNotice.style.display = "none";
+      adminNotice.style.display = "none";
+    }
+
+    function openAdminLogin() {
+      pressTimer = null;
+      hideNotices();
+      userScreen.style.display = "none";
+      adminScreen.style.display = "block";
+      document.getElementById("adminEmail").focus();
+    }
+
+    function returnToLogin() {
+      document.getElementById("adminForm").reset();
+      hideNotices();
+      adminScreen.style.display = "none";
+      userScreen.style.display = "block";
+    }
+
+    secretArea.addEventListener("pointerdown", startPress);
+    secretArea.addEventListener("pointerup", cancelPress);
+    secretArea.addEventListener("pointerleave", cancelPress);
+    secretArea.addEventListener("pointercancel", cancelPress);
+
+    ["contextmenu", "selectstart", "dragstart"].forEach(function (type) {
+      secretArea.addEventListener(type, function (event) {
+        event.preventDefault();
+      });
+    });
+
+    document.getElementById("backLink").addEventListener("click", function (event) {
+      event.preventDefault();
+      returnToLogin();
+    });
+
+    function showNotice(notice, message) {
+      notice.textContent = message;
+      notice.style.display = "block";
+    }
+
+    document.getElementById("userForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      showNotice(userNotice, "Demo only: connect your authentication backend to enable login.");
+    });
+
+    document.getElementById("adminForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      showNotice(adminNotice, "Demo only: no administrator has been authenticated. A secure backend must verify your credentials.");
+    });
+
+    document.getElementById("forgotLink").addEventListener("click", function (event) {
+      event.preventDefault();
+      showNotice(userNotice, "Password recovery will work after an authentication backend is connected.");
+    });
+
+    document.getElementById("signupLink").addEventListener("click", function (event) {
+      event.preventDefault();
+      showNotice(userNotice, "Registration is not included in this standalone login demo.");
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
+
+
+
